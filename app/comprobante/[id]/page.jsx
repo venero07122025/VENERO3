@@ -1,3 +1,5 @@
+"use client";
+
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import { supabase } from "@/lib/supabase";
