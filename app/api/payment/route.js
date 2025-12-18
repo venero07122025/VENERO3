@@ -9,14 +9,12 @@ export async function POST(req) {
         const body = await req.json();
         ("📥 Body recibido:", body);
 
-        // Inicializar Supabase
         ("🔑 Creando cliente de Supabase...");
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         );
 
-        // Obtener settings
         ("📡 Consultando settings...");
         const { data: settings, error: settingsError } = await supabase
             .from("settings")
@@ -42,14 +40,12 @@ export async function POST(req) {
             );
         }
 
-        // Inicializar Stripe
         ("💳 Inicializando Stripe...");
         const stripe = new Stripe(settings.stripe_sk);
 
         const token = body.token || "tok_visa";
         ("💳 Token usado:", token);
 
-        // Crear PaymentIntent
         ("⚡ Creando PaymentIntent...");
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(Number(body.amount) * 100),
@@ -66,13 +62,11 @@ export async function POST(req) {
 
         ("✅ PaymentIntent creado:", paymentIntent);
 
-        // Extraer últimos 4 dígitos
         const last4 =
             paymentIntent.charges?.data?.[0]?.payment_method_details?.card?.last4 || null;
 
         ("💠 Últimos 4 dígitos:", last4);
 
-        // Registrar transacción
         ("📝 Guardando transacción en Supabase...");
         const { data: insertData, error: insertError } = await supabase
             .from("transactions")

@@ -13,9 +13,6 @@ export default function Configuracion() {
     const [settings, setSettings] = useState(null);
     const router = useRouter();
 
-    // ================================
-    // Obtener configuración
-    // ================================
     const fetchSettings = async () => {
         const { data, error } = await supabase
             .from("settings")
@@ -41,9 +38,6 @@ export default function Configuracion() {
 
     const goBack = () => router.back();
 
-    // ================================
-    // Crear configuración si no existe
-    // ================================
     const createDefault = async () => {
         const { error } = await supabase.from("settings").insert([
             {
@@ -63,9 +57,6 @@ export default function Configuracion() {
         }
     };
 
-    // ================================
-    // Guardar configuración
-    // ================================
     const save = async () => {
         if (!settings || settings === "no-config") return;
 
@@ -90,14 +81,8 @@ export default function Configuracion() {
         }
     };
 
-    // ================================
-    // Render loading
-    // ================================
     if (settings === null) return "Cargando...";
 
-    // ================================
-    // Render creación
-    // ================================
     if (settings === "no-config") {
         return (
             <ProtectedRoute>
@@ -128,9 +113,6 @@ export default function Configuracion() {
         );
     }
 
-    // ================================
-    // Render edición
-    // ================================
     return (
         <ProtectedRoute>
             <Navbar />

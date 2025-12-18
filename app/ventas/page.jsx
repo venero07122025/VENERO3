@@ -17,12 +17,10 @@ export default function Ventas() {
     } = useForm();
     const router = useRouter();
 
-    // Estado para formatear MM/YY
     const [expValue, setExpValue] = useState("");
 
-    // Formateo en vivo para MM/YY
     const handleExpChange = (e) => {
-        let value = e.target.value.replace(/\D/g, ""); // solo números
+        let value = e.target.value.replace(/\D/g, "");
 
         if (value.length >= 3) {
             value = value.slice(0, 4);
@@ -35,7 +33,7 @@ export default function Ventas() {
 
     const onSubmit = async (values) => {
         try {
-            ("📤 Enviando al backend:", values);   // DEBUG
+            ("📤 Enviando al backend:", values);
 
             toast.loading("Procesando pago...");
 
@@ -45,10 +43,10 @@ export default function Ventas() {
                 body: JSON.stringify(values),
             });
 
-            ("📥 Respuesta cruda:", res);          // DEBUG
+            ("📥 Respuesta cruda:", res);
 
             const json = await res.json();
-            ("📥 JSON:", json);                    // DEBUG
+            ("📥 JSON:", json);
 
             toast.dismiss();
 
