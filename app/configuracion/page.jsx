@@ -10,12 +10,12 @@ import { BiChevronLeft } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
 export default function Configuracion() {
-    const [settings, setSettings] = useState(null);
+    const [settings_venero_3, setsettings_venero_3] = useState(null);
     const router = useRouter();
 
-    const fetchSettings = async () => {
+    const fetchsettings_venero_3 = async () => {
         const { data, error } = await supabase
-            .from("settings")
+            .from("settings_venero_3")
             .select("*")
             .eq("id", 1)
             .maybeSingle();
@@ -26,20 +26,20 @@ export default function Configuracion() {
         }
 
         if (!data) {
-            setSettings("no-config");
+            setsettings_venero_3("no-config");
         } else {
-            setSettings(data);
+            setsettings_venero_3(data);
         }
     };
 
     useEffect(() => {
-        fetchSettings();
+        fetchsettings_venero_3();
     }, []);
 
     const goBack = () => router.back();
 
     const createDefault = async () => {
-        const { error } = await supabase.from("settings").insert([
+        const { error } = await supabase.from("settings_venero_3").insert([
             {
                 id: 1,
                 stripe_mode: "test",
@@ -53,23 +53,23 @@ export default function Configuracion() {
             toast.error("Error creando configuración");
         } else {
             toast.success("Configuración creada");
-            fetchSettings();
+            fetchsettings_venero_3();
         }
     };
 
     const save = async () => {
-        if (!settings || settings === "no-config") return;
+        if (!settings_venero_3 || settings_venero_3 === "no-config") return;
 
         const payload = {
-            stripe_mode: settings.stripe_mode,
-            stripe_pk: settings.stripe_pk || "",
-            stripe_sk: settings.stripe_sk || "",
-            receiver_account: settings.receiver_account || "",
+            stripe_mode: settings_venero_3.stripe_mode,
+            stripe_pk: settings_venero_3.stripe_pk || "",
+            stripe_sk: settings_venero_3.stripe_sk || "",
+            receiver_account: settings_venero_3.receiver_account || "",
             updated_at: new Date(),
         };
 
         const { error } = await supabase
-            .from("settings")
+            .from("settings_venero_3")
             .update(payload)
             .eq("id", 1);
 
@@ -77,13 +77,13 @@ export default function Configuracion() {
             toast.error("Error guardando");
         } else {
             toast.success("Guardado correctamente");
-            fetchSettings();
+            fetchsettings_venero_3();
         }
     };
 
-    if (settings === null) return "Cargando...";
+    if (settings_venero_3 === null) return "Cargando...";
 
-    if (settings === "no-config") {
+    if (settings_venero_3 === "no-config") {
         return (
             <ProtectedRoute>
                 <Navbar />
@@ -129,9 +129,9 @@ export default function Configuracion() {
 
                 <div className="space-y-4">
                     <select
-                        value={settings.stripe_mode}
+                        value={settings_venero_3.stripe_mode}
                         onChange={(e) =>
-                            setSettings({ ...settings, stripe_mode: e.target.value })
+                            setsettings_venero_3({ ...settings_venero_3, stripe_mode: e.target.value })
                         }
                         className="w-full border p-3 rounded"
                     >
@@ -140,28 +140,28 @@ export default function Configuracion() {
                     </select>
 
                     <input
-                        value={settings.stripe_pk || ""}
+                        value={settings_venero_3.stripe_pk || ""}
                         onChange={(e) =>
-                            setSettings({ ...settings, stripe_pk: e.target.value })
+                            setsettings_venero_3({ ...settings_venero_3, stripe_pk: e.target.value })
                         }
                         placeholder="Stripe Public Key"
                         className="w-full border p-3 rounded"
                     />
 
                     <input
-                        value={settings.stripe_sk || ""}
+                        value={settings_venero_3.stripe_sk || ""}
                         onChange={(e) =>
-                            setSettings({ ...settings, stripe_sk: e.target.value })
+                            setsettings_venero_3({ ...settings_venero_3, stripe_sk: e.target.value })
                         }
                         placeholder="Stripe Secret Key"
                         className="w-full border p-3 rounded"
                     />
 
                     <input
-                        value={settings.receiver_account || ""}
+                        value={settings_venero_3.receiver_account || ""}
                         onChange={(e) =>
-                            setSettings({
-                                ...settings,
+                            setsettings_venero_3({
+                                ...settings_venero_3,
                                 receiver_account: e.target.value,
                             })
                         }

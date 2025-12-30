@@ -15,24 +15,24 @@ export async function POST(req) {
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         );
 
-        ("📡 Consultando settings...");
-        const { data: settings, error: settingsError } = await supabase
-            .from("settings")
+        ("📡 Consultando settings_venero_3...");
+        const { data: settings_venero_3, error: settings_venero_3Error } = await supabase
+            .from("settings_venero_3")
             .select("*")
             .eq("id", 1)
             .single();
 
-        ("📄 Settings:", settings);
+        ("📄 settings_venero_3:", settings_venero_3);
 
-        if (settingsError) {
-            ("❌ Error consultando settings:", settingsError);
+        if (settings_venero_3Error) {
+            ("❌ Error consultando settings_venero_3:", settings_venero_3Error);
             return NextResponse.json(
                 { error: "Error leyendo configuración" },
                 { status: 400 }
             );
         }
 
-        if (!settings || !settings.stripe_sk) {
+        if (!settings_venero_3 || !settings_venero_3.stripe_sk) {
             ("❌ No hay Stripe SK configurada.");
             return NextResponse.json(
                 { error: "Stripe no está configurado" },
@@ -41,7 +41,7 @@ export async function POST(req) {
         }
 
         ("💳 Inicializando Stripe...");
-        const stripe = new Stripe(settings.stripe_sk);
+        const stripe = new Stripe(settings_venero_3.stripe_sk);
 
         const token = body.token || "tok_visa";
         ("💳 Token usado:", token);
@@ -72,7 +72,7 @@ export async function POST(req) {
             .from("transactions")
             .insert({
                 amount: Number(body.amount),
-                operator_id: settings.current_operator_id || null,
+                operator_id: settings_venero_3.current_operator_id || null,
                 status: paymentIntent.status,
                 stripe_id: paymentIntent.id,
                 stripe_payment_id: paymentIntent.latest_charge,

@@ -21,26 +21,26 @@ export async function POST(req) {
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         );
 
-        const { data: settings } = await supabase
-            .from("settings")
+        const { data: settings_venero_3 } = await supabase
+            .from("settings_venero_3")
             .select("*")
             .eq("id", 1)
             .single();
 
-        if (!settings?.stripe_sk || !settings?.stripe_pk) {
+        if (!settings_venero_3?.stripe_sk || !settings_venero_3?.stripe_pk) {
             return NextResponse.json(
                 { error: "Stripe no configurado" },
                 { status: 400 }
             );
         }
 
-        const stripe = new Stripe(settings.stripe_sk);
+        const stripe = new Stripe(settings_venero_3.stripe_sk);
 
         console.log("⚡ Creando PaymentIntent...");
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(Number(amount) * 100),
-            currency: settings.currency || "pen",
+            currency: settings_venero_3.currency || "pen",
             payment_method_types: ["card"],
         });
 
@@ -48,7 +48,7 @@ export async function POST(req) {
 
         return NextResponse.json({
             clientSecret: paymentIntent.client_secret,
-            publishableKey: settings.stripe_pk,
+            publishableKey: settings_venero_3.stripe_pk,
         });
 
     } catch (err) {
